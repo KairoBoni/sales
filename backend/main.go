@@ -2,19 +2,21 @@ package main
 
 import (
 	"flag"
-	"log"
 	"os"
 
-	"github.com/KairoBoni/sales/server"
+	"github.com/KairoBoni/sales/backend/server"
+	"github.com/rs/zerolog/log"
 )
 
 func main() {
 	flag.Parse()
 
-	err, s := server.NewServer(os.Getenv("CONFIG_FILEPATH"))
+	s, err := server.NewServer(os.Getenv("CONFIG_FILEPATH"))
 	if err != nil {
-		log.Fatal().Err(err).Msg("failed to start API Server")
+		log.Fatal().Err(err).Msg("failed to create API Server")
 	}
 
-	s.Run()
+	if err = s.Run(); err != nil {
+		log.Fatal().Err(err).Msg("failed to start API Server")
+	}
 }
