@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"io/ioutil"
 
 	"github.com/labstack/echo/v4"
@@ -8,25 +9,27 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type Config struct {
-	Port string `yaml: port`
+type config struct {
+	Port      string `yaml:"port"`
+	IndexPath string `yaml:"indexPath"`
 }
 
 type Server struct {
 	route *echo.Echo
-	port  string
+	cfg   *config
 }
 
-func getConfig(path string) (*Config, error) {
+func getConfig(path string) (*config, error) {
 	f, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
 
-	cfg := &Config{}
+	cfg := &config{}
 	if err := yaml.Unmarshal(f, &cfg); err != nil {
 		return nil, err
 	}
+	fmt.Println(cfg)
 
 	return cfg, nil
 
@@ -39,7 +42,7 @@ func NewServer(configPath string) (*Server, error) {
 	}
 	s := &Server{
 		route: echo.New(),
-		port:  cfg.Port,
+		cfg:   cfg,
 	}
 	s.setupRoutes()
 
@@ -51,9 +54,9 @@ func (s *Server) setupRoutes() {
 	s.route.Use(middleware.Logger())
 	s.route.Use(middleware.Recover())
 
-	s.route.File("/", "static/index.html")
+	s.route.File("/", s.cfg.IndexPath)
 }
 
 func (s *Server) Run() error {
-	return s.route.Start(":" + s.port)
+	return s.route.Start(":" + s.cfg.Port)
 }

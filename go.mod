@@ -1,4 +1,4 @@
-module github.com/KairoBoni/sales/backend
+module github.com/KairoBoni/sales
 
 go 1.13
 
