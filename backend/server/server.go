@@ -10,8 +10,7 @@ import (
 )
 
 type config struct {
-	Port      string `yaml:"port"`
-	IndexPath string `yaml:"indexPath"`
+	Port string `yaml:"port"`
 }
 
 type Server struct {
@@ -54,7 +53,8 @@ func (s *Server) setupRoutes() {
 	s.route.Use(middleware.Logger())
 	s.route.Use(middleware.Recover())
 
-	s.route.File("/", s.cfg.IndexPath)
+	s.route.Static("/", "./web")
+	// s.route.File("/", "./web")
 }
 
 func (s *Server) Run() error {
