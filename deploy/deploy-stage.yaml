@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sales-beta
+  namespace: stage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      bb: web
+  template:
+    metadata:
+      labels:
+        bb: web
+    spec:
+      
+      containers:
+      - name: sales-site
+        imagePullPolicy: Always
+        image: docker.pkg.github.com/kairoboni/sales/sales:v0.0.2-beta
+        ports:
+          - containerPort: 8080
+            protocol: TCP
+        imagePullPolicy: Always
+      imagePullSecrets:
+        - name: github
