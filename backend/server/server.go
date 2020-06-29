@@ -18,6 +18,7 @@ type Server struct {
 	cfg   *config
 }
 
+//This function is unused for now
 func getConfig(path string) (*config, error) {
 	f, err := ioutil.ReadFile(path)
 	if err != nil {
@@ -34,14 +35,9 @@ func getConfig(path string) (*config, error) {
 
 }
 
-func NewServer(configPath string) (*Server, error) {
-	cfg, err := getConfig(configPath)
-	if err != nil {
-		return nil, err
-	}
+func NewServer() (*Server, error) {
 	s := &Server{
 		route: echo.New(),
-		cfg:   cfg,
 	}
 	s.setupRoutes()
 
@@ -58,5 +54,5 @@ func (s *Server) setupRoutes() {
 }
 
 func (s *Server) Run() error {
-	return s.route.Start(":" + s.cfg.Port)
+	return s.route.Start(":8080")
 }

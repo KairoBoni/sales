@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"os"
 
 	"github.com/KairoBoni/sales/backend/server"
 	"github.com/rs/zerolog/log"
@@ -11,7 +10,7 @@ import (
 func main() {
 	flag.Parse()
 
-	s, err := server.NewServer(os.Getenv("CONFIG_FILEPATH"))
+	s, err := server.NewServer()
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to create API Server")
 	}
